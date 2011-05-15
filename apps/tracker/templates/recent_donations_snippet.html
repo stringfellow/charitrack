@@ -1,5 +1,7 @@
 <div class="donations">
+{% if not no_header %}
 <h2>Latest donations...</h2>
+{% endif %}
 {% for donation in donations %}
     <div class="donation">
     {% if show_donator %}

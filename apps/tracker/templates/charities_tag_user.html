@@ -1,3 +1,5 @@
+{% load tracker_tags %}
+
 <h1>Your charities tagged {{ tag }}</h1>
 
 {% for charity in charities %}
@@ -5,5 +7,18 @@
 <h2><a href="{% url charity charity.name %}">{{ charity }}</a></h2>
 
 {% include "charity_contact.html" %}
+
+
+{% user_charity_donations user charity "365" as donation_dict %}
+
+<h3>Total donations: {{ donation_dict.total }}</h3>
+
+<h3>Your donations in the last year</h3>
+
+{% with donation_dict.donations as donations %}
+{% with 1 as no_header %}
+{% include "recent_donations_snippet.html" %}
+{% endwith %}
+{% endwith %}
 
 {% endfor %}

@@ -1,0 +1,28 @@
+<div class="donations">
+<h2>Latest donations...</h2>
+{% for donation in donations %}
+    <div class="donation">
+    {% if show_donator %}
+        {% if show_charity %}
+            {{ donation.full_link_str }}
+        {% else %}
+            {{ donation.no_charity_link_str }}
+        {% endif %}
+    {% else %}
+        {% if show_charity %}
+            {{ donation.no_donator_link_str }}
+        {% else %}
+            {{ request.user.get_profile.currency }}{{ donation.amount }}
+        {% endif %}
+    {% endif %}
+    on <span class="date">{{ donation.date }}</span>
+    {% if re_donate %}
+    <span class="redonate">
+        <a href="" onclick="return redonate_callback({{ donation.pk }});">
+        repeat this
+        </a>
+    </span>
+    {% endif %}
+    </div>
+{% endfor %}
+</div>

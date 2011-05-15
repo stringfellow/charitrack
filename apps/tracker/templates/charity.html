@@ -1,0 +1,81 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load ifsetting_tag %}
+
+{% block head_title %}{% trans "Charity" %}{% endblock %}
+
+{% block body_class %}home{% endblock %}
+
+{% block body %}
+<h1>{{charity|title}}</h1>
+<span class="donate">
+<a href="{% url charity_make_donation charity.name %}">Donate!</a>
+</span>
+
+<div class="tags">
+<ul id="charity_tags">
+{% for tag in charity.tags %}
+<li value=1>{{ tag }}</li>
+{% endfor %}
+</ul>
+{% if request.user.is_staff %}
+<form action="{% url charity_update_tags charity.pk %}" method="POST">
+{% csrf_token %}
+<label for="add_tags">Update tags: </label>
+<input name="add_tags" value="{% for tag in charity.tags %}{{ tag }}{% if not forloop.last %}, {% endif %}{% endfor %}" />
+<input type="submit" />
+</form>
+{% endif %}
+</div>
+
+{% if charity.related %}
+<div class="related">
+<h2> Related charities </h2>
+<ul>
+{% for related in charity.related %}
+<li><a href="{% url charity related.name %}">{{ related }}</a></li>
+{% endfor %}
+</ul>
+</div>
+{% endif %}
+
+{% include "charity_contact.html" %}
+
+<div class="donators">
+    <span class="mini_note">People who donate to {{ charity }}:</span>
+    {% for donee in charity.get_donators %}
+    <span class="donator"><a href="{% url pledger donee %}">{{ donee }}</a></span>{% if not forloop.last %},{% endif %}
+    {% endfor %}
+</div>
+
+{% with 0 as show_charity %}
+{% with 1 as show_donator %}
+{% include "recent_donations_snippet.html" %}
+{% endwith %}
+{% endwith %}
+
+{% endblock %}
+
+{% block extra_body %}
+
+
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.tagcloud.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.tinysort.min.js"></script>
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+    $("#charity_tags").tagcloud({
+            type: "list",
+            sizemin: 26,
+            sizemax: 26,
+            power: .01,
+            colormin: "050",
+            colormax: "0F0"});
+});
+
+</script>
+
+{% endblock %}
+

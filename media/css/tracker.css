@@ -1,0 +1,27 @@
+
+
+.charity{
+    border: solid 1px #999;
+    border-radius: 10px;
+    clear:both;
+    padding:10px;
+    }
+
+.charity_head{
+    float:right;
+    margin-right:10px;
+    margin-bottom:10px;
+    width:auto;
+    text-align:right;
+
+}
+
+.charity .description {
+    float:left;
+    width:300px;
+}
+
+.charity .donators {
+    clear:both;
+    margin:10px;
+}

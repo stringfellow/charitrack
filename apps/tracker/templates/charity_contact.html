@@ -1,0 +1,13 @@
+<div class="description">
+<p>{{ charity.description }}</p>
+</div>
+
+<div class="contact">
+{% if charity.twitter %}
+<div class="twitter">
+    <a href="http://twitter.com/{{ charity.twitter }}">
+        <img src="{{ MEDIA_URL }}images/icons/twitter_24x24.png" alt="twitter" title="twitter" /> {{ charity.twitter }}
+    </a>
+</div>
+{% endif %}
+</div>

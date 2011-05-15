@@ -1,0 +1,52 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load uni_form_tags %}
+
+{% block head_title %}{% trans "Charity" %}{% endblock %}
+
+{% block extra_head %}
+
+{% endblock %}
+
+{% block body_class %}home{% endblock %}
+
+{% block body %}
+<h1>Donate to {{ charity|title }}</h1>
+
+{% with 1 as re_donate %}
+{% include "recent_donations_snippet.html" %}
+{% endwith %}
+
+<h2>New donation</h2>
+<form id="new_donation_form" action="." method="POST">
+    <div>
+        {{ new_donation_form.date.label }} {{ new_donation_form.date }}
+    </div>
+    <div>
+        {{ new_donation_form.amount.label }}
+        {{ request.user.get_profile.currency }}{{ new_donation_form.amount }}
+    </div>
+    <input type="submit" value="Log donation"/>
+</form>
+
+{% endblock %}
+
+{% block extra_body %}
+<script src="{{ STATIC_URL }}js/jquery-ui-1.8.11.custom.min.js" type="text/javascript"></script>
+
+<div id="redonate_dialog" style="display: none;">
+TEST
+</div>
+
+<script type="text/javascript">
+
+function redonate_callback(donation_pk) {
+    var url = "{% url duplicate_donation 9999999999999999 %}";
+    url = url.replace('9999999999999999', donation_pk);
+    $('#redonate_dialog').dialog({autoOpen: false}).dialog('open');
+    return false;
+}
+
+</script>
+{% endblock %}

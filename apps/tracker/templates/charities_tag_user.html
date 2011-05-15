@@ -1,0 +1,9 @@
+<h1>Your charities tagged {{ tag }}</h1>
+
+{% for charity in charities %}
+
+<h2><a href="{% url charity charity.name %}">{{ charity }}</a></h2>
+
+{% include "charity_contact.html" %}
+
+{% endfor %}

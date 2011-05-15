@@ -1,0 +1,40 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load ifsetting_tag %}
+
+{% block head_title %}{% trans "Pledger" %}{% endblock %}
+
+{% block body_class %}home{% endblock %}
+
+{% block body %}
+<h1>Pledger {{pledger|title}}</h1>
+
+<div class="charities">
+<h2>{{pledger|title}} has helped...</h2>
+
+    {% for charity in charities %}
+    <div class="charity">
+        <h3>{{charity}}</h3>
+        <div class="description">
+        {{charity.description|slice:":100"}}...
+        </div>
+        {% with charity.get_donators as others %}
+        {% if others|length > 1 %}
+        <div class="donators">
+            <span class="mini_note">Other pledgers who donate to {{charity}}:</span>
+            {% for donee in others %}
+            {% if donee != pledger %}
+            <span class="donator"><a href="{% url pledger donee %}">{{donee}}</a></span>{% if not forloop.last %},{% endif %}
+            {% endif %}
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+    </div>
+    {% endfor %}
+</div>
+{% with 1 as show_charity %}
+{% include "recent_donations_snippet.html" %}
+{% endwith %}
+{% endblock %}

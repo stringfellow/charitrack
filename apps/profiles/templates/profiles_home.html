@@ -1,0 +1,69 @@
+{% extends "site_base.html" %}
+
+{% block extra_head %}
+
+{% endblock %}
+
+
+
+{% block body %}
+
+<h1>Hello {{ request.user }}</h1>
+
+<ul id="charity_tags" style="height: 200px">
+{% for tag, value in tags.items %}
+    <li value="{{ value }}">
+        <a href="javascript:$('#show_charities').load('{% url charities_tag_user tag user %}'); return false;">{{ tag }}</a>
+    </li>
+{% endfor %}
+</ul>
+
+<div id="show_charities">
+stuff
+</div>
+
+
+{% endblock %}
+
+
+
+{% block extra_body %}
+
+
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.tagcloud.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.tinysort.min.js"></script>
+
+<script type="text/javascript">
+
+function show_charities_(tag) {
+
+    var url = '{% url charities_tag_user "XXXXXXXX" user %}';
+    url.replace("XXXXXXXX", tag);
+
+    $('show_charities').ajax({
+        url: url,
+        success: function(data) {
+            $('show_charities').html(data);
+        }
+    });
+}
+
+$(document).ready(function(){
+    $("#charity_tags").tagcloud({
+            type: "sphere",
+            {% if tag_range < 4 %}
+            sizemin: 16,
+            {% else %}
+            sizemin: 8,
+            {% endif %}
+            sizemax: 26,
+            power: .3,
+            height:75,
+            colormin: "050",
+            colormax: "0F0"});
+    $('#show_charities').load('{% url charities_tag_user tag_max_name user %}');
+});
+
+</script>
+
+{% endblock %}

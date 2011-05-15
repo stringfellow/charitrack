@@ -1,0 +1,53 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load ifsetting_tag %}
+
+{% block head_title %}{% trans "Charities" %}{% endblock %}
+
+{% block body_class %}home{% endblock %}
+
+{% block body %}
+<h1>Charities</h1>
+
+{% for charity in charities %}
+<div class="charity">
+    <div class="charity_head">
+    {% if charity.logo %}
+        <a href="{{charity.site}}" target="_blank">
+        <img src="{{charity.logo}}" />
+        </a>
+    {% endif %}
+    <h2><a href="{% url charity charity.name %}">
+        {{charity}}
+        </a>
+        <a href="{{charity.site}}" target="_blank">↝</a></h2>
+    {% if charity.twitter %}
+        <span class="twitter">
+            <a href="http://twitter.com/{{charity.twitter}}" target="_blank">
+                @{{charity.twitter}}
+            </a>
+        </span>
+        <br/>
+    {% endif %}
+
+    {% if charity.facebook %}
+        <span class="facebook">
+            <a href="{{charity.facebook}}" target="_blank">
+                facebook page
+            </a>
+        </span>
+    {% endif %}
+    </div>
+    <div class="description">
+    {{charity.description}}
+    </div>
+    <div class="donators">
+    <span class="mini_note">People who donate to {{charity}}:</span>
+        {% for donee in charity.get_donators %}
+        <span class="donator"><a href="{% url pledger donee %}">{{donee}}</a></span>{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
